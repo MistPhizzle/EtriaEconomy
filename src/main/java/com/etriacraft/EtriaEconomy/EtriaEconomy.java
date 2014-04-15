@@ -42,6 +42,8 @@ public class EtriaEconomy extends JavaPlugin {
 		plugin.getConfig().addDefault("Settings.Currency.SingularName", "Coin");
 		plugin.getConfig().addDefault("Settings.Currency.PluralName", "Coins");
 		
+		plugin.getConfig().addDefault("Settings.Accounts.StartingAmount", 0);
+		
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 	}

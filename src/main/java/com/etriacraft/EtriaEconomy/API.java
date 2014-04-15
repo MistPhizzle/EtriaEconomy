@@ -45,12 +45,13 @@ public class API implements Economy {
 	public boolean createPlayerAccount(String playerName) {
 		Methods.accounts.put(playerName, (double) 0);
 		OfflinePlayer oP = Bukkit.getOfflinePlayer(playerName);
+		double startingamount = plugin.getConfig().getDouble("Settings.Accounts.StartingAmount");
 		if (oP == null || oP.getUniqueId() == null) {
-			DBConnection.sql.modifyQuery("INSERT INTO econ_players(player, amount) VALUES ('" + playerName + "', " + 0 + ");");
+			DBConnection.sql.modifyQuery("INSERT INTO econ_players(player, amount) VALUES ('" + playerName + "', " + startingamount + ");");
 		}
 		else {
 			Methods.uuids.put(playerName, oP.getUniqueId().toString());
-			DBConnection.sql.modifyQuery("INSERT INTO econ_players(uuid, player, amount) VALUES ('" + oP.getUniqueId().toString() + "', '" + playerName + "', " + 0 + ");");
+			DBConnection.sql.modifyQuery("INSERT INTO econ_players(uuid, player, amount) VALUES ('" + oP.getUniqueId().toString() + "', '" + playerName + "', " + startingamount + ");");
 		}
 		return true;
 	}

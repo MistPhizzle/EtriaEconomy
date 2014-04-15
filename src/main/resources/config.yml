@@ -4,3 +4,5 @@ Settings:
   Currency:
     SingularName: Coin
     PluralName: Coins
+  Accounts:
+    StartingAmount: 0
