@@ -39,8 +39,8 @@ public class EtriaEconomy extends JavaPlugin {
 	
 	public static void checkConfig() {
 		plugin.getConfig().addDefault("Storage.engine", "sqlite");
-		plugin.getConfig().addDefault("Settings.Currency.SingularName", "Yuan");
-		plugin.getConfig().addDefault("Settings.Currency.PluralName", "Yuans");
+		plugin.getConfig().addDefault("Settings.Currency.SingularName", "Coin");
+		plugin.getConfig().addDefault("Settings.Currency.PluralName", "Coins");
 		
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
