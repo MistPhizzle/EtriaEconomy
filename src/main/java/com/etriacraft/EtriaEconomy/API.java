@@ -1,13 +1,12 @@
 package com.etriacraft.EtriaEconomy;
 
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+
+import java.util.List;
 
 public class API implements Economy {
 
@@ -59,6 +58,11 @@ public class API implements Economy {
 	}
 
 	@Override
+	public boolean createPlayerAccount(String player, String world) {
+		return false;
+	}
+
+	@Override
 	public String currencyNamePlural() {
 		return plugin.getConfig().getString("Settings.Currency.PluralName");
 	}
@@ -93,6 +97,11 @@ public class API implements Economy {
 	}
 
 	@Override
+	public EconomyResponse depositPlayer(String player, String world, double amount) {
+		return this.depositPlayer(player, amount);
+	}
+
+	@Override
 	public String format(double amount) {
 		return Methods.formatNoColor(amount);
 	}
@@ -106,6 +115,11 @@ public class API implements Economy {
 	public double getBalance(String acc) {
 		String player = Methods.getAccount(acc);
 		return Methods.accounts.get(player);
+	}
+
+	@Override
+	public double getBalance(String acc, String world) {
+		return this.getBalance(acc);
 	}
 
 	@Override
@@ -126,6 +140,11 @@ public class API implements Economy {
 	}
 
 	@Override
+	public boolean has(String player, String world, double amount) {
+		return this.has(player, amount);
+	}
+
+	@Override
 	public boolean hasAccount(String player) {
 		for (String account: Methods.accounts.keySet()) {
 			if (account.equalsIgnoreCase(player)) {
@@ -133,6 +152,11 @@ public class API implements Economy {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public boolean hasAccount(String player, String world) {
+		return this.hasAccount(player);
 	}
 
 	@Override
@@ -176,6 +200,11 @@ public class API implements Economy {
 			return new EconomyResponse(0, getBalance(player), ResponseType.SUCCESS, "");
 		}
 
+	}
+
+	@Override
+	public EconomyResponse withdrawPlayer(String acc, String world, double amount) {
+		return null;
 	}
 
 }
