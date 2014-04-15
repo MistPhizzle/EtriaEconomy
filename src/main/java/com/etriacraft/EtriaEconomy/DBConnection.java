@@ -1,7 +1,7 @@
-package com.etriacraft.EtriaEconomy;
+package main.java.com.etriacraft.EtriaEconomy;
 
-import com.etriacraft.EtriaEconomy.SQLite.Database;
-import com.etriacraft.EtriaEconomy.SQLite.SQLite;
+import main.java.com.etriacraft.EtriaEconomy.SQLite.Database;
+import main.java.com.etriacraft.EtriaEconomy.SQLite.SQLite;
 
 public class DBConnection {
 

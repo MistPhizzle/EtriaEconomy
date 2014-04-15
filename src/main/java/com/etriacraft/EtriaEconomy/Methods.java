@@ -1,4 +1,4 @@
-package com.etriacraft.EtriaEconomy;
+package main.java.com.etriacraft.EtriaEconomy;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

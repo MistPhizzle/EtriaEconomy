@@ -1,4 +1,4 @@
-package com.etriacraft.EtriaEconomy.SQLite;
+package main.java.com.etriacraft.EtriaEconomy.SQLite;
 
 import java.io.File;
 import java.sql.Connection;
