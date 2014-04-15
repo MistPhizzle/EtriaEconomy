@@ -1,0 +1,6 @@
+Storage:
+  engine: sqlite
+Settings:
+  Currency:
+    SingularName: Yuan
+    PluralName: Yuans

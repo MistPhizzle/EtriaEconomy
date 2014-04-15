@@ -1,0 +1,7 @@
+name: EtriaEconomy
+version: 1.0
+author: MistPhizzle
+main: com.etriacraft.EtriaEconomy.EtriaEconomy
+commands:
+  money:
+    aliases: [etriaeconomy, balance, econ]
