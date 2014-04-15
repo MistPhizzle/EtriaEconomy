@@ -1,4 +1,4 @@
-package main.java.com.etriacraft.EtriaEconomy;
+package com.etriacraft.EtriaEconomy;
 
 import java.util.logging.Logger;
 
