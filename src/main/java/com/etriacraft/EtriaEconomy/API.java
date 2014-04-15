@@ -10,55 +10,53 @@ import java.util.List;
 
 public class API implements Economy {
 
-	EtriaEconomy plugin;
-
-	private final String name = "EtriaEconomy";
+	private EtriaEconomy plugin;
 
 	public API (EtriaEconomy plugin) {
 		this.plugin = plugin;
 	}
 
 	@Override
-	public EconomyResponse bankBalance(String arg0) {
+	public EconomyResponse bankBalance(String name) {
 		return null;
 	}
 
 	@Override
-	public EconomyResponse bankDeposit(String arg0, double arg1) {
+	public EconomyResponse bankDeposit(String name, double amount) {
 		return null;
 	}
 
 	@Override
-	public EconomyResponse bankHas(String arg0, double arg1) {
+	public EconomyResponse bankHas(String name, double amount) {
 		return null;
 	}
 
 	@Override
-	public EconomyResponse bankWithdraw(String arg0, double arg1) {
+	public EconomyResponse bankWithdraw(String name, double amount) {
 		return null;
 	}
 
 	@Override
-	public EconomyResponse createBank(String arg0, String arg1) {
+	public EconomyResponse createBank(String name, String playerName) {
 		return null;
 	}
 
 	@Override
-	public boolean createPlayerAccount(String player) {
-		Methods.accounts.put(player, (double) 0);
-		OfflinePlayer oP = Bukkit.getOfflinePlayer(player);
+	public boolean createPlayerAccount(String playerName) {
+		Methods.accounts.put(playerName, (double) 0);
+		OfflinePlayer oP = Bukkit.getOfflinePlayer(playerName);
 		if (oP == null || oP.getUniqueId() == null) {
-			DBConnection.sql.modifyQuery("INSERT INTO econ_players(player, amount) VALUES ('" + player + "', " + 0 + ");");
+			DBConnection.sql.modifyQuery("INSERT INTO econ_players(player, amount) VALUES ('" + playerName + "', " + 0 + ");");
 		}
 		else {
-			Methods.uuids.put(player, oP.getUniqueId().toString());
-			DBConnection.sql.modifyQuery("INSERT INTO econ_players(uuid, player, amount) VALUES ('" + oP.getUniqueId().toString() + "', '" + player + "', " + 0 + ");");
+			Methods.uuids.put(playerName, oP.getUniqueId().toString());
+			DBConnection.sql.modifyQuery("INSERT INTO econ_players(uuid, player, amount) VALUES ('" + oP.getUniqueId().toString() + "', '" + playerName + "', " + 0 + ");");
 		}
 		return true;
 	}
 
 	@Override
-	public boolean createPlayerAccount(String player, String world) {
+	public boolean createPlayerAccount(String playerName, String world) {
 		return false;
 	}
 
@@ -73,13 +71,13 @@ public class API implements Economy {
 	}
 
 	@Override
-	public EconomyResponse deleteBank(String arg0) {
+	public EconomyResponse deleteBank(String name) {
 		return null;
 	}
 
 	@Override
-	public EconomyResponse depositPlayer(String acc, double amount) {
-		String player = Methods.getAccount(acc);
+	public EconomyResponse depositPlayer(String playerName, double amount) {
+		String player = Methods.getAccount(playerName);
 		if (amount < 0) {
 			return new EconomyResponse(0, 0, ResponseType.FAILURE, "Cannot withdraw negative funds.");
 		}
@@ -97,8 +95,8 @@ public class API implements Economy {
 	}
 
 	@Override
-	public EconomyResponse depositPlayer(String player, String world, double amount) {
-		return this.depositPlayer(player, amount);
+	public EconomyResponse depositPlayer(String playerName, String world, double amount) {
+		return this.depositPlayer(playerName, amount);
 	}
 
 	@Override
@@ -112,14 +110,14 @@ public class API implements Economy {
 	}
 
 	@Override
-	public double getBalance(String acc) {
-		String player = Methods.getAccount(acc);
+	public double getBalance(String playerName) {
+		String player = Methods.getAccount(playerName);
 		return Methods.accounts.get(player);
 	}
 
 	@Override
-	public double getBalance(String acc, String world) {
-		return this.getBalance(acc);
+	public double getBalance(String playerName, String world) {
+		return this.getBalance(playerName);
 	}
 
 	@Override
@@ -129,25 +127,25 @@ public class API implements Economy {
 
 	@Override
 	public String getName() {
-		return name;
+		return "EtriaEconomy";
 	}
 
 	@Override
-	public boolean has(String player, double amount) {
-		String player2 = Methods.getAccount(player);
+	public boolean has(String playerName, double amount) {
+		String player2 = Methods.getAccount(playerName);
 		if (Methods.accounts.get(player2) >= amount) return true;
 		return false;
 	}
 
 	@Override
-	public boolean has(String player, String world, double amount) {
-		return this.has(player, amount);
+	public boolean has(String playerName, String world, double amount) {
+		return this.has(playerName, amount);
 	}
 
 	@Override
-	public boolean hasAccount(String player) {
+	public boolean hasAccount(String playerName) {
 		for (String account: Methods.accounts.keySet()) {
-			if (account.equalsIgnoreCase(player)) {
+			if (account.equalsIgnoreCase(playerName)) {
 				return true;
 			}
 		}
@@ -155,8 +153,8 @@ public class API implements Economy {
 	}
 
 	@Override
-	public boolean hasAccount(String player, String world) {
-		return this.hasAccount(player);
+	public boolean hasAccount(String playerName, String world) {
+		return this.hasAccount(playerName);
 	}
 
 	@Override
@@ -165,12 +163,12 @@ public class API implements Economy {
 	}
 
 	@Override
-	public EconomyResponse isBankMember(String arg0, String arg1) {
+	public EconomyResponse isBankMember(String name, String playerName) {
 		return null;
 	}
 
 	@Override
-	public EconomyResponse isBankOwner(String arg0, String arg1) {
+	public EconomyResponse isBankOwner(String name, String playerName) {
 		return null;
 	}
 
@@ -180,8 +178,8 @@ public class API implements Economy {
 	}
 
 	@Override
-	public EconomyResponse withdrawPlayer(String acc, double amount) {
-		String player = Methods.getAccount(acc);
+	public EconomyResponse withdrawPlayer(String playerName, double amount) {
+		String player = Methods.getAccount(playerName);
 		if (amount < 0) {
 			return new EconomyResponse(0, 0, ResponseType.FAILURE, "Cannot withdraw negative funds.");
 		}
@@ -203,8 +201,8 @@ public class API implements Economy {
 	}
 
 	@Override
-	public EconomyResponse withdrawPlayer(String acc, String world, double amount) {
-		return null;
+	public EconomyResponse withdrawPlayer(String playerName, String world, double amount) {
+		return this.withdrawPlayer(playerName, amount);
 	}
 
 }
