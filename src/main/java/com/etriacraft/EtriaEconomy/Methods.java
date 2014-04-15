@@ -14,7 +14,7 @@ public class Methods {
 	static EtriaEconomy plugin;
 	
 	public Methods(EtriaEconomy plugin) {
-		this.plugin = plugin;
+		Methods.plugin = plugin;
 	}
 	
 	public static HashMap<String, String> uuids = new HashMap<String, String>(); // {UUID / Last Known Player Name Using UUID}
