@@ -72,6 +72,30 @@ public class Commands {
 						s.sendMessage(prefix + "§cProper Usage: §3/money take [Player] [Amount]");
 						return true;
 					}
+					if (args[0].equalsIgnoreCase("top")) {
+						if (!s.hasPermission("etriaeconomy.money.top")) {
+							s.sendMessage(prefix + "§cYou don't have permission to do that.");
+							return true;
+						}
+
+						int number = 5;
+						ResultSet rs2 = DBConnection.sql.readQuery("SELECT * FROM econ_players ORDER BY amount DESC LIMIT " + number + ";");
+						try {
+							if (!rs2.next()) {
+								s.sendMessage(prefix + "§cNo accounts found.");
+								return true;
+							}
+							s.sendMessage("§a-----§6EtriaEconomy Richest§a-----");
+							int i = 0;
+							do {
+								i++;
+								s.sendMessage("§2" + i + "§a: " + rs2.getString("player") + " - " + rs2.getDouble("amount"));
+							} while (rs2.next());
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						return true;
+					}
 					else {
 						// They are looking up money of another player.
 						if (!s.hasPermission("etriaeconomy.balance.other")) {
