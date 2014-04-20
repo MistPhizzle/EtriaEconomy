@@ -22,6 +22,13 @@ public class EtriaEconomy extends JavaPlugin {
 		EtriaEconomy.log = this.getLogger();
 		plugin = this;		
 		checkConfig();
+		
+		DBConnection.host = getConfig().getString("Storage.MySQL.host");
+		DBConnection.port = getConfig().getInt("Storage.MySQL.port");
+		DBConnection.pass = getConfig().getString("Storage.MySQL.pass");
+		DBConnection.db = getConfig().getString("Storage.MySQL.db");
+		DBConnection.user = getConfig().getString("Storage.MySQL.user");
+		
 		DBConnection.init();
 		new Methods(this);
 		setupVault();
@@ -39,6 +46,13 @@ public class EtriaEconomy extends JavaPlugin {
 	
 	public static void checkConfig() {
 		plugin.getConfig().addDefault("Storage.engine", "sqlite");
+		
+		plugin.getConfig().addDefault("Storage.MySQL.host", "localhost");
+		plugin.getConfig().addDefault("Storage.MySQL.port", 3306);
+		plugin.getConfig().addDefault("Storage.MySQL.user", "root");
+		plugin.getConfig().addDefault("Storage.MySQL.pass", "");
+		plugin.getConfig().addDefault("Storage.MySQL.db", "minecraft");
+		
 		plugin.getConfig().addDefault("Settings.Currency.SingularName", "Coin");
 		plugin.getConfig().addDefault("Settings.Currency.PluralName", "Coins");
 		

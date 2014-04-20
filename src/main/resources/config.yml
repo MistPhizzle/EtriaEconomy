@@ -1,5 +1,11 @@
 Storage:
   engine: sqlite
+  MySQL:
+    user: root
+    pass: ''
+    port: 3306
+    db: minecraft
+    host: localhost
 Settings:
   Currency:
     SingularName: Coin
