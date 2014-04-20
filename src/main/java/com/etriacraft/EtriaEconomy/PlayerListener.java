@@ -25,11 +25,21 @@ public class PlayerListener implements Listener {
 			try {
 				if (rs2.next()) {
 					if (rs2.getString("uuid") == null || rs2.getString("uuid") == "") {
-						DBConnection.sql.modifyQuery("UPDATE econ_players SET uuid = '" + e.getPlayer().getUniqueId() + "' WHERE player = '" + e.getPlayer().getName() + "';");
+						DBConnection.sql.modifyQuery("UPDATE econ_players SET uuid = '" + e.getPlayer().getUniqueId().toString() + "' WHERE player = '" + e.getPlayer().getName() + "';");
 					}
 				}
 			} catch (SQLException ex) {
 				ex.printStackTrace();
+			}
+		}
+		ResultSet rs2 = DBConnection.sql.readQuery("SELECT * FROM econ_players WHERE uuid = '" + e.getPlayer().getUniqueId().toString() + "';");
+		try {
+			if (rs2.next()) {
+				// There was a UUID entry
+				if (!rs2.getString("player").equals(e.getPlayer().getUniqueId().toString())) {
+					// The player has changed their username ;o
+					DBConnection.sql.modifyQuery("UPDATE econ_players SET player = '" + e.getPlayer().getName() + "' WHERE uuid = '" + rs2.getString("uuid") + "';");
+				}
 			}
 		}
 	}
