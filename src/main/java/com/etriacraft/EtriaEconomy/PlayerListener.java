@@ -41,6 +41,8 @@ public class PlayerListener implements Listener {
 					DBConnection.sql.modifyQuery("UPDATE econ_players SET player = '" + e.getPlayer().getName() + "' WHERE uuid = '" + rs2.getString("uuid") + "';");
 				}
 			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
 		}
 	}
 
