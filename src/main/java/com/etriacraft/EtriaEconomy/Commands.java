@@ -196,7 +196,7 @@ public class Commands {
 						s.sendMessage(prefix + "§aYou have sent §3" + Methods.format(amount) + "§a to §3" + target);
 						for (Player player: Bukkit.getOnlinePlayers()) {
 							if (player.getName().equalsIgnoreCase(target)) {
-								player.sendMessage(prefix + "§aYou have received §3" + Methods.format(amount) + "§a to §3" + target);
+								player.sendMessage(prefix + "§aYou have received §3" + Methods.format(amount) + "§a from §3" + s.getName());
 							}
 						}
 						return true;
