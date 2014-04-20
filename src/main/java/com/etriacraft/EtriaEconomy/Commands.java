@@ -56,6 +56,22 @@ public class Commands {
 						s.sendMessage("§3/money top [#]§f - View top ranking players by wealth.");
 						return true;
 					}
+					if (Arrays.asList(sendaliases).contains(args[0])) {
+						s.sendMessage(prefix + "§cProper Usage: §3/money send [Player] [Amount");
+						return true;
+					}
+					if (Arrays.asList(createaliases).contains(args[0])) {
+						s.sendMessage(prefix + "§cProper Usage: §3/money create [AccountName]");
+						return true;
+					}
+					if (Arrays.asList(givealiases).contains(args[0])) {
+						s.sendMessage(prefix + "§cProper Usage: §3/money give [Player] [Amount]");
+						return true;
+					}
+					if (Arrays.asList(takealiases).contains(args[0])) {
+						s.sendMessage(prefix + "§cProper Usage: §3/money take [Player] [Amount]");
+						return true;
+					}
 					else {
 						// They are looking up money of another player.
 						if (!s.hasPermission("etriaeconomy.balance.other")) {
