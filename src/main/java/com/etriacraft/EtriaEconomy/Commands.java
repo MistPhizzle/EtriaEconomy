@@ -13,26 +13,26 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 
 public class Commands {
-	
+
 	EtriaEconomy plugin;
-	
+
 	public Commands(EtriaEconomy plugin) {
 		this.plugin = plugin;
 		init();
 	}
-	
+
 	String[] helpaliases = {"help", "?", "h"};
 	String[] createaliases = {"create", "new", "c"};
 	String[] givealiases = {"give", "grant", "g"};
 	String[] takealiases = {"take", "t"};
 	String[] sendaliases = {"send", "pay"};
-	
+
 	public String prefix = ChatColor.GRAY + "[" + ChatColor.GOLD + "EtriaEconomy" + ChatColor.GRAY + "] ";
-	
+
 	private void init() {
 		PluginCommand money = plugin.getCommand("money");
 		CommandExecutor exe;
-		
+
 		exe = new CommandExecutor() {
 			@Override
 			public boolean onCommand(CommandSender s, Command c, String label, String[] args) {
@@ -78,12 +78,12 @@ public class Commands {
 							s.sendMessage(prefix + "§cYou don't have permission to do that.");
 							return true;
 						}
-						
+
 						if (plugin.getAPI().hasAccount(args[1])) {
 							s.sendMessage(prefix + "§cAn account with that name already exists.");
 							return true;
 						}
-						
+
 						plugin.getAPI().createPlayerAccount(args[1]);
 						s.sendMessage(prefix + "§aYou have created an account for: §3" + args[1]);
 						return true;
@@ -93,7 +93,7 @@ public class Commands {
 							s.sendMessage(prefix + "§cYou don't have permission to do that.");
 							return true;
 						}
-						
+
 						int number = Integer.parseInt(args[1]);
 						ResultSet rs2 = DBConnection.sql.readQuery("SELECT * FROM econ_players ORDER BY amount DESC LIMIT " + number + ";");
 						try {
@@ -121,12 +121,12 @@ public class Commands {
 						}
 						double amount = Double.parseDouble(args[2]);
 						String player = args[1];
-						
+
 						if (!plugin.getAPI().hasAccount(player)) {
 							s.sendMessage(prefix + "§cNo account found for §3" + player);
 							return true;
 						}
-						
+
 						if (amount < 0) {
 							s.sendMessage(prefix + "§cYou may not grant negative numbers.");
 							return true;
@@ -142,26 +142,26 @@ public class Commands {
 						}
 						double amount = Double.parseDouble(args[2]);
 						String player = args[1];
-						
+
 						if (!plugin.getAPI().hasAccount(player)) {
 							s.sendMessage(prefix + "§cNo account found for §3" + player);
 							return true;
 						}
-						
+
 						if (amount < 0) {
 							s.sendMessage(prefix + "§cYou cannot take a negative amount.");
 							return true;
 						}
-						
+
 						if (plugin.getAPI().getBalance(player) < amount) {
 							s.sendMessage(prefix + "§cYou cannot take more than the player has.");
 							return true;
 						}
-						
+
 						plugin.getAPI().withdrawPlayer(player, amount);
 						s.sendMessage("§cYou have taken §3" + Methods.format(amount) + " §cfrom §3" + player);
 						return true;
-		
+
 					}
 					if (Arrays.asList(sendaliases).contains(args[0])) {
 						if (!s.hasPermission("etriaeconomy.money.send")) {
@@ -170,12 +170,12 @@ public class Commands {
 						}
 						double amount = Double.parseDouble(args[2]);
 						String target = args[1];
-						
+
 						if (!plugin.getAPI().hasAccount(target)) {
 							s.sendMessage(prefix + "§cNo account found for §3" + target);
 							return true;
 						}
-						
+
 						if (!plugin.getAPI().hasAccount(s.getName())) {
 							s.sendMessage(prefix + "§cYou don't have an account to send money from.");
 							return true;
@@ -184,15 +184,15 @@ public class Commands {
 							s.sendMessage(prefix + "§cYou cannot send a negative amount.");
 							return true;
 						}
-						
+
 						if (amount > plugin.getAPI().getBalance(s.getName())) {
 							s.sendMessage(prefix + "§cYou cannot send more money than you have.");
 							return true;
 						}
-						
+
 						plugin.getAPI().depositPlayer(target, amount);
 						plugin.getAPI().withdrawPlayer(s.getName(), amount);
-						
+
 						s.sendMessage(prefix + "§aYou have sent §3" + Methods.format(amount) + "§a to §3" + target);
 						for (Player player: Bukkit.getOnlinePlayers()) {
 							if (player.getName().equalsIgnoreCase(target)) {

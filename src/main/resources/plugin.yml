@@ -6,3 +6,17 @@ loadbefore: [ChestShop]
 commands:
   money:
     aliases: [etriaeconomy, balance, econ]
+permissions:
+  etriaeconomy.admin:
+    default: op
+    children:
+      etriaeconomy.user: true
+      etriaeconomy.create: true
+      etriaeconomy.money.give: true
+      etriaeconomy.money.take: true
+  etriaeconomy.user:
+    default: op
+    children:
+      etriaeconomy.balance.other: true
+      etriaeconomy.money.top: true
+      etriaeconomy.money.send: true
