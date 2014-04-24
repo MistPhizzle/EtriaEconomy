@@ -89,7 +89,7 @@ public class Commands {
 							int i = 0;
 							do {
 								i++;
-								s.sendMessage("§2" + i + "§a: " + rs2.getString("player") + " - " + Methods.format(rs2.getDouble("amount"));
+								s.sendMessage("§2" + i + "§a: " + rs2.getString("player") + " - " + Methods.format(rs2.getDouble("amount")));
 							} while (rs2.next());
 						} catch (SQLException e) {
 							e.printStackTrace();

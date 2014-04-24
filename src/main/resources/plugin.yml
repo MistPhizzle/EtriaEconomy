@@ -1,5 +1,5 @@
 name: EtriaEconomy
-version: 1.0
+version: 1.0.0
 author: MistPhizzle
 main: com.etriacraft.EtriaEconomy.EtriaEconomy
 loadbefore: [ChestShop]
