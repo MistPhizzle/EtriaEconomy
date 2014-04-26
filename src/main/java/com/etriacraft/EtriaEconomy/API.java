@@ -187,10 +187,9 @@ public class API implements Economy {
 
 		if (!hasAccount(player)) {
 			return new EconomyResponse(0, 0, ResponseType.FAILURE, "Account doesn't exist.");
-		}
 
-		if (!has(player, amount)) {
-			return new EconomyResponse(0, getBalance(player), ResponseType.FAILURE, "Insufficient Funds.");
+//		if (!has(player, amount)) {
+//			return new EconomyResponse(0, getBalance(player), ResponseType.FAILURE, "Insufficient Funds.");
 		} else {
 			Double initamount = Methods.accounts.get(player);
 			Double newamount = initamount - amount;
