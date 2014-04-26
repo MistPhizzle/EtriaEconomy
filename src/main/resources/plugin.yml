@@ -14,6 +14,7 @@ permissions:
       etriaeconomy.create: true
       etriaeconomy.money.give: true
       etriaeconomy.money.take: true
+      etriaeconomy.money.delete: true
   etriaeconomy.user:
     default: op
     children:

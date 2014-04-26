@@ -64,6 +64,7 @@ public class EtriaEconomy extends JavaPlugin {
 		
 		plugin.getConfig().addDefault("Settings.Accounts.StartingAmount", 0);
 		plugin.getConfig().addDefault("Settings.Accounts.ServerAccount", "Server");
+		plugin.getConfig().addDefault("Settings.Accounts.AddBalanceToServerAccountOnDelete", true);
 		
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();

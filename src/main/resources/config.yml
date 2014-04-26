@@ -13,3 +13,4 @@ Settings:
   Accounts:
     StartingAmount: 0
     ServerAccount: Server
+    AddBalanceToServerAccountOnDelete: true

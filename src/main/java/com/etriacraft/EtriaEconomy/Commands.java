@@ -119,16 +119,22 @@ public class Commands {
 				}
 				if (args.length == 2) {
 					if (Arrays.asList(deletealiases).contains(args[0])) {
-						if (!s.hasPermission("etriaeconomy.delete")) {
+						if (!s.hasPermission("etriaeconomy.money.delete")) {
 							s.sendMessage(prefix + "§cYou don't have permission to do that.");
 							return true;
 						}
-						if (!plugin.getAPI().hasAccount(Methods.getAccount(args[1]))) {
+						
+						String account = Methods.getAccount(args[1]);
+						if (!plugin.getAPI().hasAccount(account)) {
 							s.sendMessage(prefix + "§cCannot find account specified.");
 							return true;
 						}
 						
-						Methods.deletePlayerAccount(Methods.getAccount(args[1]));
+						double balance = plugin.getAPI().getBalance(account);
+						if (plugin.getConfig().getBoolean("Settings.Accounts.AddBalanceToServerAccountOnDelete")) {
+							plugin.getAPI().depositPlayer(plugin.getConfig().getString("Settings.Accounts.ServerAccount"), balance);
+						}
+						Methods.deletePlayerAccount(account);
 						s.sendMessage("§cDeleted account of " + args[1]);
 					}
 					if (Arrays.asList(createaliases).contains(args[0])) {
