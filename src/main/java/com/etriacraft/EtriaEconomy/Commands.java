@@ -26,6 +26,7 @@ public class Commands {
 	String[] givealiases = {"give", "grant", "g"};
 	String[] takealiases = {"take", "t"};
 	String[] sendaliases = {"send", "pay"};
+	String[] deletealiases = {"delete", "remove", "d"};
 
 	public String prefix = ChatColor.GRAY + "[" + ChatColor.GOLD + "EtriaEconomy" + ChatColor.GRAY + "] ";
 
@@ -52,6 +53,7 @@ public class Commands {
 						s.sendMessage("§3/money create [Player]§f - Create an account for another player.");
 						s.sendMessage("§3/money give [Player] [Amount]§f - Add money to a player's account.");
 						s.sendMessage("§3/money take [Player] [Amount]§f - Take money from a player's account.");
+						s.sendMessage("§3/money delete [Player]§f - Delete a player's account.");
 						s.sendMessage("§3/money send [Player] [Amount]§f - Send money to a player.");
 						s.sendMessage("§3/money top [#]§f - View top ranking players by wealth.");
 						return true;
@@ -70,6 +72,10 @@ public class Commands {
 					}
 					if (Arrays.asList(takealiases).contains(args[0])) {
 						s.sendMessage(prefix + "§cProper Usage: §3/money take [Player] [Amount]");
+						return true;
+					}
+					if (Arrays.asList(deletealiases).contains(args[0])) {
+						s.sendMessage(prefix + "§cProper Usage: §3/money delete [Player]");
 						return true;
 					}
 					if (args[0].equalsIgnoreCase("top")) {
@@ -112,6 +118,19 @@ public class Commands {
 					}
 				}
 				if (args.length == 2) {
+					if (Arrays.asList(deletealiases).contains(args[0])) {
+						if (!s.hasPermission("etriaeconomy.delete")) {
+							s.sendMessage(prefix + "§cYou don't have permission to do that.");
+							return true;
+						}
+						if (!plugin.getAPI().hasAccount(Methods.getAccount(args[1]))) {
+							s.sendMessage(prefix + "§cCannot find account specified.");
+							return true;
+						}
+						
+						Methods.deletePlayerAccount(Methods.getAccount(args[1]));
+						s.sendMessage("§cDeleted account of " + args[1]);
+					}
 					if (Arrays.asList(createaliases).contains(args[0])) {
 						// Creating an account.
 						if (!s.hasPermission("etriaeconomy.create")) {

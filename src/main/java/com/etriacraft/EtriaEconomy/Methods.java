@@ -104,4 +104,10 @@ public class Methods {
 		
 		return Double.valueOf(formattedAmount);
 	}
+	
+	public static boolean deletePlayerAccount(String playerName) {
+		Methods.accounts.remove(playerName);
+		DBConnection.sql.modifyQuery("DELETE * FROM econ_players WHERE player = '" + playerName + "'");
+		return true;
+	}
 }
