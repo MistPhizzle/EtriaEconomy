@@ -34,9 +34,15 @@ public class EtriaEconomy extends JavaPlugin {
 		setupVault();
 		api = new API(this);
 		Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+		if (!api.hasAccount(getConfig().getString("Settings.Accounts.ServerAccount"))) {
+			api.createPlayerAccount(getConfig().getString("Settings.Accounts.ServerAccount"));
+			log.info("Created Server Account.");
+		}
 		Methods.loadAccounts();
 		Methods.loadUUIDs();
 		new Commands(this);
+		
+		
 	}
 	
 	@Override
@@ -57,6 +63,7 @@ public class EtriaEconomy extends JavaPlugin {
 		plugin.getConfig().addDefault("Settings.Currency.PluralName", "Coins");
 		
 		plugin.getConfig().addDefault("Settings.Accounts.StartingAmount", 0);
+		plugin.getConfig().addDefault("Settings.Accounts.ServerAccount", "Server");
 		
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();

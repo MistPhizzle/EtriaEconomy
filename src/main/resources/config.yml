@@ -12,3 +12,4 @@ Settings:
     PluralName: Coins
   Accounts:
     StartingAmount: 0
+    ServerAccount: Server
