@@ -14,3 +14,18 @@ Settings:
     StartingAmount: 0
     ServerAccount: Server
     AddBalanceToServerAccountOnDelete: true
+  Interest:
+    Enabled: true
+    Type: flat
+    Flat:
+      Rate: 0.1
+      SubtractFromServerAccount: true
+    Bracket:
+      SubtractFromServerAccount: true
+      Factor:
+        UseServerAverage: true
+      High:
+        Rate: 0.005
+        Minimum: 50000
+      Low:
+        Rate: 0.1

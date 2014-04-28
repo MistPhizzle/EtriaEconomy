@@ -27,6 +27,7 @@ public class Commands {
 	String[] takealiases = {"take", "t"};
 	String[] sendaliases = {"send", "pay"};
 	String[] deletealiases = {"delete", "remove", "d"};
+	String[] interestaliases = {"interest", "i"};
 
 	public String prefix = ChatColor.GRAY + "[" + ChatColor.GOLD + "EtriaEconomy" + ChatColor.GRAY + "] ";
 
@@ -56,6 +57,10 @@ public class Commands {
 						s.sendMessage("§3/money delete [Player]§f - Delete a player's account.");
 						s.sendMessage("§3/money send [Player] [Amount]§f - Send money to a player.");
 						s.sendMessage("§3/money top [#]§f - View top ranking players by wealth.");
+						return true;
+					}
+					if (Arrays.asList(interestaliases).contains(args[0])) {
+						s.sendMessage(prefix + "§cProper Usage: §3/money interest [Compound|Info]");
 						return true;
 					}
 					if (Arrays.asList(sendaliases).contains(args[0])) {
@@ -118,6 +123,170 @@ public class Commands {
 					}
 				}
 				if (args.length == 2) {
+					if (Arrays.asList(interestaliases).contains(args[0])) {
+						if (args[1].equalsIgnoreCase("compound")) {
+							if (!s.hasPermission("etriaeconomy.money.interest.compound")) {
+								s.sendMessage(prefix + "§cYou don't have permission to do that.");
+								return true;
+							}
+							if (!plugin.getConfig().getBoolean("Settings.Interest.Enabled")) {
+								s.sendMessage(prefix + "§cInterest is disabled.");
+								return true;
+							}
+							String type = null;
+							if (plugin.getConfig().getString("Settings.Interest.Type").equalsIgnoreCase("bracket")) {
+								type = "bracket";
+							} else {
+								type = "flat";
+							}
+							
+							if (type.equalsIgnoreCase("flat")) {
+								double rate = plugin.getConfig().getDouble("Settings.Interest.Flat.Rate");
+								double total = 0;
+								int accounts = 0;
+								for (String accountName: Methods.accounts.keySet()) {
+									if (plugin.getAPI().getBalance(accountName) == 0) continue;
+									if (accountName.equalsIgnoreCase(plugin.getConfig().getString("Settings.Accounts.ServerAccount"))) continue;
+									double interest = plugin.getAPI().getBalance(accountName) * rate;
+									plugin.getAPI().depositPlayer(accountName, interest);
+									total = total + interest;
+									accounts++;
+								}
+								if (plugin.getConfig().getBoolean("Settings.Interest.Flat.SubtractFromServerAccount")) {
+									s.sendMessage(prefix + "§aSubtracted " + Methods.formatNoColor(total) + " from " + plugin.getConfig().getString("Settings.Accounts.ServerAccount"));
+									plugin.getAPI().withdrawPlayer(plugin.getConfig().getString("Settings.Accounts.ServerAccount"), total);
+								}
+								s.sendMessage(prefix + "§aInterest compounded to " + accounts + " accounts.");
+							}
+							if (type.equalsIgnoreCase("bracket")) {
+								double total = 0;
+								int accounts = 0;
+								boolean useServerAverage = plugin.getConfig().getBoolean("Settings.Interest.Bracket.Factor.UseServerAverage");
+								double average = 0;
+								double totalmoney = 0;
+								if (useServerAverage) {
+									for (String accountName: Methods.accounts.keySet()) {
+										if (accountName.equalsIgnoreCase(plugin.getConfig().getString("Settings.Accounts.ServerAccount"))) continue;
+										if (plugin.getAPI().getBalance(accountName) == 0) continue;
+										totalmoney = totalmoney + plugin.getAPI().getBalance(accountName);
+										accounts++;
+									}
+									average = totalmoney / accounts;
+									
+									for (String accountName: Methods.accounts.keySet()) {
+										if (accountName.equalsIgnoreCase(plugin.getConfig().getString("Settings.Accounts.ServerAccount"))) continue;
+										if (plugin.getAPI().getBalance(accountName) == 0) continue;
+										if (plugin.getAPI().getBalance(accountName) > average) {
+											double interest = plugin.getAPI().getBalance(accountName) * plugin.getConfig().getDouble("Settings.Interest.Bracket.High.Rate");
+											total = total + interest;
+											plugin.getAPI().depositPlayer(accountName, interest);
+										} else {
+											double interest = plugin.getAPI().getBalance(accountName) * plugin.getConfig().getDouble("Settings.Interest.Bracket.Low.Rate");
+											total = total + interest;
+											plugin.getAPI().depositPlayer(accountName, interest);
+										}
+									}
+									s.sendMessage(prefix + "§aInterest compounded to " + accounts + " accounts.");
+									if (plugin.getConfig().getBoolean("Settings.Interest.Bracket.SubtractFromServerAccount")) {
+										plugin.getAPI().withdrawPlayer(plugin.getConfig().getString("Settings.Accounts.ServerAccount"), total);
+										s.sendMessage(prefix + "§aSubtracted " + Methods.formatNoColor(total) + " from " + plugin.getConfig().getString("Settings.Accounts.ServerAccount"));
+									}
+									return true;
+								}
+								if (!useServerAverage) {
+									double minimum = plugin.getConfig().getDouble("Settings.Interest.Bracket.High.Minimum");
+									for (String accountName: Methods.accounts.keySet()) {
+										if (accountName.equalsIgnoreCase(plugin.getConfig().getString("Settings.Accounts.ServerAccount"))) continue;
+										if (plugin.getAPI().getBalance(accountName) == 0) continue;
+										if (plugin.getAPI().getBalance(accountName) >= minimum) {
+											double interest = plugin.getAPI().getBalance(accountName) * plugin.getConfig().getDouble("Settings.Interest.Bracket.High.Rate");
+											total = total + interest;
+											plugin.getAPI().depositPlayer(accountName, interest);
+											accounts++;
+										} else {
+											double interest = plugin.getAPI().getBalance(accountName) * plugin.getConfig().getDouble("Settings.Interest.Bracket.Low.Rate");
+											total = total + interest;
+											plugin.getAPI().depositPlayer(accountName, interest);
+											accounts++;
+										}
+									}
+									
+									s.sendMessage(prefix + "§aInterest compounded to " + accounts + " accounts");
+									if (plugin.getConfig().getBoolean("Settings.Interest.Bracket.SubtractFromServerAccount")) {
+										plugin.getAPI().withdrawPlayer(plugin.getConfig().getString("Settings.Accounts.ServerAccount"), total);
+										s.sendMessage(prefix + "§aSubtracted " + Methods.formatNoColor(total) + " from " + plugin.getConfig().getString("Settings.Accounts.ServerAccount"));
+									}
+									return true;
+								}
+							}
+						}
+						if (args[1].equalsIgnoreCase("info")) {
+							if (!plugin.getConfig().getBoolean("Settings.Interest.Enabled")) {
+								s.sendMessage(prefix + "§cInterest is disabled.");
+								return true;
+							}
+							if (!s.hasPermission("etriaeconomy.money.interest.info")) {
+								s.sendMessage(prefix + "§cYou don't have permission to do that.");
+								return true;
+							}
+							String type = null;
+							if (plugin.getConfig().getString("Settings.Interest.Type").equalsIgnoreCase("bracket")) {
+								type = "bracket";
+							} else {
+								type = "flat";
+							}
+							
+							if (type.equalsIgnoreCase("flat")) {
+								double rate = plugin.getConfig().getDouble("Settings.Interest.Flat.Rate");
+								s.sendMessage(prefix + "§aType: §3Flat Interest Rate");
+								s.sendMessage(prefix + "§aInterest Rate: §3" + rate * 100 + "%");
+								s.sendMessage(prefix + "§aIf interest were compounded right now you would receive: §3" + Methods.formatNoColor(rate * plugin.getAPI().getBalance(s.getName())));
+							} else {
+								boolean useServerAverage = plugin.getConfig().getBoolean("Settings.Interest.Bracket.Factor.UseServerAverage");
+								s.sendMessage(prefix + "§aType: §3Progressive Interest Rate");
+								double average = 0;
+								int accounts = 0;
+								double totalmoney = 0;
+								double rate = 0;
+								if (useServerAverage) {
+									for (String accountName: Methods.accounts.keySet()) {
+										if (accountName.equalsIgnoreCase(plugin.getConfig().getString("Settings.Accounts.ServerAccount"))) continue;
+										if (plugin.getAPI().getBalance(accountName) == 0) continue;
+										totalmoney = totalmoney + plugin.getAPI().getBalance(accountName);
+										accounts++;
+									}
+									average = totalmoney / accounts;
+									if (plugin.getAPI().getBalance(s.getName()) <= average) {
+										s.sendMessage("§aBracket: §3LOW §a(You Have Less Than Average)");
+										rate = plugin.getConfig().getDouble("Settings.Interest.Bracket.Low.Rate");
+										s.sendMessage(prefix + "§aInterest Rate: §3" + rate * 100 + "%");
+									} else {
+										s.sendMessage("§aBracket: §3HIGH §a(You Have More Than Average)");
+										rate = plugin.getConfig().getDouble("Settings.Interest.Bracket.High.Rate");
+										s.sendMessage(prefix + "§aInterest Rate: §3" + rate * 100 + "%");
+									}
+									s.sendMessage(prefix + "§aIf interest were compounded right now you would receive: §3" + Methods.formatNoColor(rate * plugin.getAPI().getBalance(s.getName())));
+									return true;
+								} else {
+									double minimum = plugin.getConfig().getDouble("Settings.Interest.Bracket.High.Minimum");
+									if (plugin.getAPI().getBalance(s.getName()) >= minimum) { // High
+										s.sendMessage("§aBracket: §3High §a(You have more than " + minimum + ")");
+										rate = plugin.getConfig().getDouble("Settings.Interest.Bracket.High.Rate");
+										s.sendMessage(prefix + "§aInterest Rate: §3" + rate * 100 + "%");
+									} else {
+										s.sendMessage("§aBracket: §3Low §a(You have less than " + minimum + ")");
+										rate = plugin.getConfig().getDouble("Settings.Interest.Bracket.Low.Rate");
+										s.sendMessage(prefix + "§aInterest Rate: §3" + rate * 100 + "%");
+									}
+									s.sendMessage(prefix + "§aIf interest were compounded right now you would receive: §3" + Methods.formatNoColor(rate * plugin.getAPI().getBalance(s.getName())));
+									return true;
+								}
+							}
+						} else {
+							s.sendMessage("§cProper Usage: §3/money interest [Compound|Info]");
+							return true;
+						}
+					}
 					if (Arrays.asList(deletealiases).contains(args[0])) {
 						if (!s.hasPermission("etriaeconomy.money.delete")) {
 							s.sendMessage(prefix + "§cYou don't have permission to do that.");

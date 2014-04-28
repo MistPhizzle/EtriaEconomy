@@ -34,13 +34,14 @@ public class EtriaEconomy extends JavaPlugin {
 		setupVault();
 		api = new API(this);
 		Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+		Methods.loadAccounts();
+		Methods.loadUUIDs();
+		new Commands(this);
+		
 		if (!api.hasAccount(getConfig().getString("Settings.Accounts.ServerAccount"))) {
 			api.createPlayerAccount(getConfig().getString("Settings.Accounts.ServerAccount"));
 			log.info("Created Server Account.");
 		}
-		Methods.loadAccounts();
-		Methods.loadUUIDs();
-		new Commands(this);
 		
 		
 	}
@@ -65,6 +66,16 @@ public class EtriaEconomy extends JavaPlugin {
 		plugin.getConfig().addDefault("Settings.Accounts.StartingAmount", 0);
 		plugin.getConfig().addDefault("Settings.Accounts.ServerAccount", "Server");
 		plugin.getConfig().addDefault("Settings.Accounts.AddBalanceToServerAccountOnDelete", true);
+		
+		plugin.getConfig().addDefault("Settings.Interest.Enabled", true);
+		plugin.getConfig().addDefault("Settings.Interest.Type", "flat");
+		plugin.getConfig().addDefault("Settings.Interest.Flat.Rate", 0.1);
+		plugin.getConfig().addDefault("Settings.Interest.Flat.SubtractFromServerAccount", true);
+		plugin.getConfig().addDefault("Settings.Interest.Bracket.SubtractFromServerAccount", true);
+		plugin.getConfig().addDefault("Settings.Interest.Bracket.Factor.UseServerAverage", true);
+		plugin.getConfig().addDefault("Settings.Interest.Bracket.High.Rate", .005);
+		plugin.getConfig().addDefault("Settings.Interest.Bracket.High.Minimum", 50000);
+		plugin.getConfig().addDefault("Settings.Interest.Bracket.Low.Rate", 0.01);
 		
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
