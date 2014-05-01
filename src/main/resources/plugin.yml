@@ -15,9 +15,11 @@ permissions:
       etriaeconomy.money.give: true
       etriaeconomy.money.take: true
       etriaeconomy.money.delete: true
+      etriaeconomy.money.interest.compound: true
   etriaeconomy.user:
     default: op
     children:
       etriaeconomy.balance.other: true
       etriaeconomy.money.top: true
       etriaeconomy.money.send: true
+      etriaeconomy.money.interest.info: true
