@@ -149,6 +149,7 @@ public class Commands {
 									if (accountName.equalsIgnoreCase(plugin.getConfig().getString("Settings.Accounts.ServerAccount"))) continue;
 									double interest = plugin.getAPI().getBalance(accountName) * rate;
 									plugin.getAPI().depositPlayer(accountName, interest);
+									Methods.logTransaction(accountName, interest, "RECEIVED", plugin.getConfig().getString("Settings.Accounts.ServerAccount"), "Interest Compounded");
 									total = total + interest;
 									accounts++;
 								}
@@ -184,6 +185,8 @@ public class Commands {
 											double interest = plugin.getAPI().getBalance(accountName) * plugin.getConfig().getDouble("Settings.Interest.Bracket.Low.Rate");
 											total = total + interest;
 											plugin.getAPI().depositPlayer(accountName, interest);
+											Methods.logTransaction(accountName, interest, "RECEIVED", plugin.getConfig().getString("Settings.Accounts.ServerAccount"), "Interest Compounded");
+											
 										}
 									}
 									s.sendMessage(prefix + "§aInterest compounded to " + accounts + " accounts.");
