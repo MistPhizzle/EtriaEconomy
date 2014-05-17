@@ -35,6 +35,7 @@ public class DBConnection {
 				EtriaEconomy.log.info("Creating economy transaction table.");
 				String query = "CREATE TABLE `econ_players` ("
 						+ "`id` int(32) NOT NULL AUTO_INCREMENT,"
+						+ "`date` varchar(255),"
 						+ "`player` varchar(255),"
 						+ "`amount` double,"
 						+ "`type` varchar(255),"
@@ -61,6 +62,7 @@ public class DBConnection {
 				EtriaEconomy.log.info("Creating economy transactions table.");
 				String query = "CREATE TABLE `econ_transactions` ("
 						+ "`id` INTEGER PRIMARY KEY,"
+						+ "`date` TEXT(255),"
 						+ "`player` TEXT(255),"
 						+ "`amount` DOUBLE(255),"
 						+ "`type` TEXT(255),"

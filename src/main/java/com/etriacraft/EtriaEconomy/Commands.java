@@ -207,6 +207,7 @@ public class Commands {
 											double interest = plugin.getAPI().getBalance(accountName) * plugin.getConfig().getDouble("Settings.Interest.Bracket.Low.Rate");
 											total = total + interest;
 											plugin.getAPI().depositPlayer(accountName, interest);
+											Methods.logTransaction(accountName, interest, "RECEIVED", plugin.getConfig().getString("Settings.Accounts.ServerAccount"), "Interest Compounded");
 											accounts++;
 										}
 									}

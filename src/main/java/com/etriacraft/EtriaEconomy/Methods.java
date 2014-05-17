@@ -2,8 +2,11 @@ package com.etriacraft.EtriaEconomy;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -114,7 +117,7 @@ public class Methods {
 	public static void logTransaction(String accountName, double amount, String type, String other, String message) {
 		if (!plugin.getConfig().getBoolean("Settings.LogTransactions")) return;
 		message = message.replaceAll("'", "");
-		DBConnection.sql.modifyQuery("INSERT INTO econ_transactions (player, amount, type, other, message) VALUES ('" + accountName + "', " + amount + ", '" + type + "', '" + other + "', '" + message + "')");
+		DBConnection.sql.modifyQuery("INSERT INTO econ_transactions (date, player, amount, type, other, message) VALUES ('" + getCurrentDate() + "', '" + accountName + "', " + amount + ", '" + type + "', '" + other + "', '" + message + "')");
 	}
 	
 	public static String buildString(String[] args, int begin) {
@@ -126,5 +129,11 @@ public class Methods {
 			mess.append(args[i]);
 		}
 		return mess.toString().trim();
+	}
+	
+	public static String getCurrentDate() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		return dateFormat.format(date);
 	}
 }
