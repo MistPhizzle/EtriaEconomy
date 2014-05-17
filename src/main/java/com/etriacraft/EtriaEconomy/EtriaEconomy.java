@@ -77,6 +77,8 @@ public class EtriaEconomy extends JavaPlugin {
 		plugin.getConfig().addDefault("Settings.Interest.Bracket.High.Minimum", 50000);
 		plugin.getConfig().addDefault("Settings.Interest.Bracket.Low.Rate", 0.01);
 		
+		plugin.getConfig().addDefault("Settings.LogTransactions", true);
+		
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 	}

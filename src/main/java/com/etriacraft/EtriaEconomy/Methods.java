@@ -112,6 +112,7 @@ public class Methods {
 	}
 	
 	public static void logTransaction(String accountName, double amount, String type, String other, String message) {
+		if (!plugin.getConfig().getBoolean("Settings.LogTransactions")) return;
 		message = message.replaceAll("'", "");
 		DBConnection.sql.modifyQuery("INSERT INTO econ_transactions (player, amount, type, other, message) VALUES ('" + accountName + "', " + amount + ", '" + type + "', '" + other + "', '" + message + "')");
 	}

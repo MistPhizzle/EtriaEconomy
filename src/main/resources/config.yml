@@ -29,3 +29,4 @@ Settings:
         Minimum: 50000
       Low:
         Rate: 0.01
+  LogTransactions: true
