@@ -28,4 +28,4 @@ Settings:
         Rate: 0.005
         Minimum: 50000
       Low:
-        Rate: 0.1
+        Rate: 0.01

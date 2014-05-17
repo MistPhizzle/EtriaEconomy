@@ -55,7 +55,7 @@ public class Commands {
 						s.sendMessage("§3/money give [Player] [Amount]§f - Add money to a player's account.");
 						s.sendMessage("§3/money take [Player] [Amount]§f - Take money from a player's account.");
 						s.sendMessage("§3/money delete [Player]§f - Delete a player's account.");
-						s.sendMessage("§3/money send [Player] [Amount]§f - Send money to a player.");
+						s.sendMessage("§3/money send [Player] [Amount] <Message>§f - Send money to a player.");
 						s.sendMessage("§3/money top [#]§f - View top ranking players by wealth.");
 						return true;
 					}
@@ -64,7 +64,7 @@ public class Commands {
 						return true;
 					}
 					if (Arrays.asList(sendaliases).contains(args[0])) {
-						s.sendMessage(prefix + "§cProper Usage: §3/money send [Player] [Amount");
+						s.sendMessage(prefix + "§cProper Usage: §3/money send [Player] [Amount] <Message>");
 						return true;
 					}
 					if (Arrays.asList(createaliases).contains(args[0])) {
@@ -347,6 +347,7 @@ public class Commands {
 						return true;
 					}
 				}
+				
 				if (args.length == 3) {
 					if (Arrays.asList(givealiases).contains(args[0])) {
 						if (!s.hasPermission("etriaeconomy.money.give")) {
@@ -427,10 +428,51 @@ public class Commands {
 						plugin.getAPI().depositPlayer(target, amount);
 						plugin.getAPI().withdrawPlayer(s.getName(), amount);
 
+						Methods.logTransaction(target, amount, "RECEIVED", s.getName(), null);
+						Methods.logTransaction(s.getName(), amount, "SENT", s.getName(), null);
 						s.sendMessage(prefix + "§aYou have sent §3" + Methods.format(amount) + "§a to §3" + target);
 						for (Player player: Bukkit.getOnlinePlayers()) {
 							if (player.getName().equalsIgnoreCase(target)) {
 								player.sendMessage(prefix + "§aYou have received §3" + Methods.format(amount) + "§a from §3" + s.getName());
+							}
+						}
+						return true;
+					}
+				}
+				if (args.length == 4) {
+					if (Arrays.asList(sendaliases).contains(args[0])) {
+						if (!s.hasPermission("etriaeconomy.money.send")) {
+							s.sendMessage(prefix + "§cYou don't have permission to do that.");
+							return true;
+						}
+						double amount = Double.parseDouble(args[2]);
+						String target = args[1];
+						
+						if (!plugin.getAPI().hasAccount(target)) {
+							s.sendMessage(prefix + "§cNo account found for §3" + target);
+							return true;
+						}
+						
+						if (!plugin.getAPI().hasAccount(s.getName())) {
+							s.sendMessage(prefix + "§cYou don't have an account to send money from.");
+							return true;
+						}
+						
+						if (amount > plugin.getAPI().getBalance(s.getName())) {
+							s.sendMessage(prefix + "§cYou cannot send more money than you have.");
+							return true;
+						}
+						
+						plugin.getAPI().depositPlayer(target, amount);
+						plugin.getAPI().withdrawPlayer(s.getName(), amount);
+						
+						String message = Methods.buildString(args, 3);
+						Methods.logTransaction(target, amount, "RECEIVED", s.getName(), message);
+						Methods.logTransaction(s.getName(), amount, "SENT", s.getName(), message);
+						s.sendMessage(prefix + "§aYou have sent §3" + Methods.format(amount) + "§a to §3" + target + "§a for §3" + message);
+						for (Player player: Bukkit.getOnlinePlayers()) {
+							if (player.getName().equalsIgnoreCase(target)) {
+								player.sendMessage(prefix + "§aYou have received §3" + Methods.format(amount) + "§a from §3" + s.getName() + "§a for §3" + message);
 							}
 						}
 						return true;

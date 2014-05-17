@@ -110,4 +110,20 @@ public class Methods {
 		DBConnection.sql.modifyQuery("DELETE FROM econ_players WHERE player = '" + playerName + "'");
 		return true;
 	}
+	
+	public static void logTransaction(String accountName, double amount, String type, String other, String message) {
+		message = message.replaceAll("'", "");
+		DBConnection.sql.modifyQuery("INSERT INTO econ_transactions (player, amount, type, other, message) VALUES ('" + accountName + "', " + amount + ", '" + type + "', '" + other + "', '" + message + "')");
+	}
+	
+	public static String buildString(String[] args, int begin) {
+		StringBuilder mess = new StringBuilder();
+		for (int i = begin; i < args.length; i++) {
+			if (i > begin) {
+				mess.append(" ");
+			}
+			mess.append(args[i]);
+		}
+		return mess.toString().trim();
+	}
 }
