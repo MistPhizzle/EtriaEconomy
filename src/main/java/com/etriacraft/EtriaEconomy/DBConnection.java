@@ -33,7 +33,7 @@ public class DBConnection {
 			
 			if (!sql.tableExists("econ_transactions")) {
 				EtriaEconomy.log.info("Creating economy transaction table.");
-				String query = "CREATE TABLE `econ_players` ("
+				String query = "CREATE TABLE `econ_transactions` ("
 						+ "`id` int(32) NOT NULL AUTO_INCREMENT,"
 						+ "`date` varchar(255),"
 						+ "`player` varchar(255),"

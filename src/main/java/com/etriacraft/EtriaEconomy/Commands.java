@@ -443,7 +443,7 @@ public class Commands {
 						return true;
 					}
 				}
-				if (args.length == 4) {
+				if (args.length >= 4) {
 					if (Arrays.asList(sendaliases).contains(args[0])) {
 						if (!s.hasPermission("etriaeconomy.money.send")) {
 							s.sendMessage(prefix + "§cYou don't have permission to do that.");
