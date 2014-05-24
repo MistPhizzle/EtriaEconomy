@@ -181,6 +181,7 @@ public class Commands {
 											double interest = plugin.getAPI().getBalance(accountName) * plugin.getConfig().getDouble("Settings.Interest.Bracket.High.Rate");
 											total = total + interest;
 											plugin.getAPI().depositPlayer(accountName, interest);
+											Methods.logTransaction(accountName, interest, "RECEIVED", plugin.getConfig().getString("Settings.Accounts.ServerAccount"), "Interest Compounded");
 										} else {
 											double interest = plugin.getAPI().getBalance(accountName) * plugin.getConfig().getDouble("Settings.Interest.Bracket.Low.Rate");
 											total = total + interest;
@@ -472,7 +473,7 @@ public class Commands {
 						
 						String message = Methods.buildString(args, 3);
 						Methods.logTransaction(target, amount, "RECEIVED", s.getName(), message);
-						Methods.logTransaction(s.getName(), amount, "SENT", s.getName(), message);
+						Methods.logTransaction(s.getName(), amount, "SENT", target, message);
 						s.sendMessage(prefix + "§aYou have sent §3" + Methods.format(amount) + "§a to §3" + target + "§a for §3" + message);
 						for (Player player: Bukkit.getOnlinePlayers()) {
 							if (player.getName().equalsIgnoreCase(target)) {
